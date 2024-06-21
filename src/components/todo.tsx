@@ -1,4 +1,4 @@
-import { useReducer } from "react"
+import { useReducer, useState } from "react"
 import OneTodo from "./OnetodoItem";
 import './todo.scss'
 
@@ -40,8 +40,9 @@ type actionType=
     |{type:"ADD_TODO",payload:{id:number,todo:string,completed:boolean}}
     |{type:"UPDATE_TODO",payload:{id:number,todo:string,completed:boolean}}
     |{type:"DELETE_TODO",payload:{id:number}}
+    |{type:"TOGGLE_TODO",payload:{id:number}}
 
-const todoReducer=(state:todosTypeExample[],action:actionType)=>{
+const todoReducer=(state:todosTypeExample[],action:actionType)=>{   
     switch(action.type){
         case "ADD_TODO":
             return [...state,{id:action.payload.id,todo:action.payload.todo,completed:action.payload.completed}]
@@ -54,32 +55,46 @@ const todoReducer=(state:todosTypeExample[],action:actionType)=>{
             })
         case "DELETE_TODO":
             return state.filter(todo=>todo.id!==action.payload.id)
+        case "TOGGLE_TODO":
+            return state.map(todo=>{
+                if(todo.id===action.payload.id){
+                    return {...todo,completed:!todo.completed}
+                }
+                return todo
+            })
         default:
             return state
     }
+
 
 }
 
 
 const TodoService=()=>{
     const [state, dispatch] = useReducer(todoReducer, todoExampe);
+    const [text,setText]=useState(' ')
     
     const handleSubmit=(e: any)=>{
         e.preventDefault();
-        dispatch({type:"ADD_TODO",payload:{id: state.length+1,todo:e.target[0].value,completed:false}})
-        e.target[0].value=""
+        if(text.trim()){
+            dispatch({type:"ADD_TODO",payload:{id: state.length+1,todo:text,completed:false}})
+            setText(' ')
+        }
     }
     return(<>
         <div className="container">
-            <form className="formInput" onSubmit={handleSubmit}>
-                <input type="text" className="input"/>
-                <button className="button">Add</button>
-            </form>
+            <div className="formInput" >
+                <input value={text} onChange={(e)=>setText(e.target.value)} type="text" className="input"/>
+                <button className="button" onClick={handleSubmit} >Add</button>
+            </div>
             <ul className="listDiv">
                 {state.map((todo,index)=>{
-                    return <OneTodo key={index} todo={todo.todo} id={todo.id}/>
+                    return <OneTodo key={index} todo={todo.todo} dispatch={dispatch} id={todo.id} setText={setText} completed={todo.completed}/>
                 })}
             </ul>
+            <div>
+                bottom
+            </div>
         </div>
     </>
     )
