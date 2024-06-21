@@ -10,6 +10,11 @@ li{
     width: 100%;
     border-radius: 8px;
     position: relative;
+    .checkBox{
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+    }
     p{
         margin: 0px 10px;
     }    
@@ -27,4 +32,13 @@ li{
             background-color: rgba(16, 131, 16, 0.884);
         }
     }
+}
+
+.completed {
+    text-decoration: line-through;
+    color: rgba(168, 122, 30, 0.795);
+}
+
+.uncompleted {
+    text-decoration: none;
 }

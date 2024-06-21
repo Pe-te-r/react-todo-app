@@ -19,8 +19,8 @@ const OneTodo: React.FC<TodoProps>=({todo,id,dispatch,setText,completed})=>{
         dispatch({type:"TOGGLE_TODO",payload:{id:id}})
         }
         return(
-        <li>
-            <input type="checkbox" checked={completed} onChange={() => togleTodo()} />
+        <li className={`todo-item ${completed ? 'completed' : 'uncompleted'}`}>
+            <input className='checkBox' type="checkbox" checked={completed} onChange={() => togleTodo()} />
             {/* <p>{id}</p> */}
             <p>{todo}</p>
             <div className="btns">
