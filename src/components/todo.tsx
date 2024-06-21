@@ -1,4 +1,3 @@
-import { useReducer, useState,useEffect } from "react"
 import OneTodo from "./OnetodoItem";
 import './todo.scss'
 
