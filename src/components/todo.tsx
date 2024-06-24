@@ -1,6 +1,7 @@
-import { useReducer, useState } from "react"
+import { useEffect, useReducer, useState } from "react"
 import OneTodo from "./OnetodoItem";
 import './todo.scss'
+import UseLocalStorage from "../custom_hooks/storage_hook";
 
 interface todosTypeExample{
     id:number;
@@ -71,8 +72,14 @@ const todoReducer=(state:todosTypeExample[],action:actionType)=>{
 
 
 const TodoService=()=>{
-    const [state, dispatch] = useReducer(todoReducer, todoExampe);
+    const[todos,setTodos]= UseLocalStorage('todos',todoExampe)
+    
+    const [state, dispatch] = useReducer(todoReducer, todos);
     const [text,setText]=useState(' ')
+
+    useEffect(()=>{
+        setTodos(state)
+    },[state,setTodos])
     
     const handleSubmit=(e: any)=>{
         e.preventDefault();
@@ -81,6 +88,7 @@ const TodoService=()=>{
             setText(' ')
         }
     }
+
 
     return(<>
         <div className="container">
